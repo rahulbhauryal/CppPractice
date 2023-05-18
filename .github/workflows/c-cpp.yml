@@ -22,7 +22,7 @@ jobs:
       run: |
         g++ main.cpp play01Templates.cpp playground.cpp
         ls
-        .\a.out
+        ./a.out
     - name: configure
       run: ./configure
     - name: make
