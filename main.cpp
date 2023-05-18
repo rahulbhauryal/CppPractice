@@ -1,5 +1,6 @@
 #include <iostream>
 #include "playground.h"
+#include <memory>
 
 int main()
 {

@@ -1,0 +1,27 @@
+{
+    "editor.fontSize": 18,
+    "files.associations": {
+        "ios": "cpp",
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "string": "cpp",
+        "typeinfo": "cpp",
+        "utility": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocinfo": "cpp",
+        "xlocnum": "cpp",
+        "xmemory": "cpp",
+        "xstddef": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "exception": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "memory": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}
