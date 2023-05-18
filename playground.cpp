@@ -14,4 +14,11 @@ void Playground::PlayTemplate() {
     playClassTemplate2 = std::make_unique<ClassTemplate<std::string>>("hi");
     std::cout << "read value: " << playClassTemplate2->read() << std::endl;
 
+    // default value parameter
+    ValueTemplate<5, 100> valueTemplate1;
+    valueTemplate1.print();
+
+    ValueTemplate<3> valueTemplate2;
+    valueTemplate2.print();
+
 }

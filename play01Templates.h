@@ -45,3 +45,28 @@ class ClassTemplate {
             return value;
         }
 };
+
+/**
+* @brief This template shows how default value parameters. 
+*         The code provided is a C++ template class named "ValueTemplate".
+*/
+template<int size, int value = 0>
+class ValueTemplate {
+    private:
+        int *base;
+    
+    public:
+        ValueTemplate() {
+            base = new int[size];
+
+            for (int i = 0; i < size; i++) {
+                base[i] = value;
+            }
+        }
+
+        void print() {
+            for (int i = 0; i < size; i++) {
+                std::cout << "print:: " << base[i] << std::endl;
+            }
+        }
+};
