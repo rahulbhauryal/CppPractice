@@ -18,6 +18,10 @@ jobs:
       run: echo Hi Mars...!
     - name: gcc version
       run: g++ --version
+    - name: compile and run gcc
+      run: |
+        g++ main.cpp play01Templates.cpp playground.cpp
+        .\a.out
     - name: configure
       run: ./configure
     - name: make
