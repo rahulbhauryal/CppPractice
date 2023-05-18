@@ -21,6 +21,7 @@ jobs:
     - name: compile and run gcc
       run: |
         g++ main.cpp play01Templates.cpp playground.cpp
+        ls
         .\a.out
     - name: configure
       run: ./configure
