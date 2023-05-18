@@ -17,4 +17,11 @@ This will also invoke the default constructor and create an object of MyTemplate
 
 Remember, if you use () after an object name, it will be treated as a function declaration instead of an object declaration.
 
+# mingw
+MinGW, on the other hand, is a development environment and set of tools for Windows that includes GCC as its compiler. It provides the necessary components to compile and build native Windows applications using the GCC toolchain.
+
+When you use MinGW, you can invoke the MinGW GCC compiler to compile your source code, which will generate the a.exe executable as the default output file. However, MinGW itself is not directly responsible for the specific naming of a.exe as it is determined by the default behavior of GCC on Windows.
+
+So, to summarize, MinGW is the environment that allows you to utilize the GCC compiler on Windows, while the resulting a.exe file is simply the default name given to the executable produced by the GCC compiler in the absence of a specific output name.
+
 #
