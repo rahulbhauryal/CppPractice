@@ -18,6 +18,8 @@ jobs:
       run: echo Hi Mars...!
     - name: gcc version
       run: g++ --version
+    - name: ls
+      run: ls
     - name: compile and run gcc make
       run: make
     - name: make clean
