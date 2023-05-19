@@ -10,11 +10,11 @@ class FunctionTemplate {
     private:
             template<typename T>
             void printMe(T num) {
-                printf("print in templete %s\n", std::to_string(num));
+                std::cout << "print in templete" << num << std::endl;
             }
 
             void printMe(double num) {
-                printf("print in overloading %f\n", num);
+                std::cout << "print in overriding" << num << std::endl;
             }
 
     public:
