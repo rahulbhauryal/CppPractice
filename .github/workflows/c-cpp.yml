@@ -1,0 +1,29 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: test echo
+      run: echo Hi Mars...!
+    - name: gcc version
+      run: g++ --version
+    - name: ls
+      run: ls
+    - name: compile and run gcc make
+      run: |
+          make
+          ls
+          ./myprogram
+    - name: make clean
+      run: make
