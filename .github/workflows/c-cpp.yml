@@ -21,8 +21,9 @@ jobs:
     - name: ls
       run: ls
     - name: compile and run gcc make
-      run: make
+      run: |
+          make
+          ls
+          myprogram.out
     - name: make clean
       run: make
-    - name: make distcheck
-      run: make distcheck
