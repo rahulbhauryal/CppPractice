@@ -18,16 +18,9 @@ jobs:
       run: echo Hi Mars...!
     - name: gcc version
       run: g++ --version
-    - name: compile and run gcc
-      run: |
-        g++ main.cpp play01Templates.cpp playground.cpp
-        ls
-        ./a.out
-    - name: configure
-      run: ./configure
-    - name: make
+    - name: compile and run gcc make
       run: make
-    - name: make check
-      run: make check
+    - name: make clean
+      run: make
     - name: make distcheck
       run: make distcheck
