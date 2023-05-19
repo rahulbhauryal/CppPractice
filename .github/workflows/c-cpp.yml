@@ -24,6 +24,6 @@ jobs:
       run: |
           make
           ls
-          myprogram.out
+          myprogram
     - name: make clean
       run: make
