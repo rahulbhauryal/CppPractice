@@ -91,6 +91,30 @@ because it uses to compile which is changed, not to compile all files.
     ![makefile](./images/md_14.JPG)
     ![makefile](./images/md_15.JPG)
 
+6. Subsitution refrence
+- create object variable from the sources variables
+
+7. Fake targets Phoy clean
+
+8. Flash to MCU:
+add location where debugger is located.
+![makefile](./images/md_16.JPG)
+
+create rule for flashing (make flash)
+![makefile](./images/md_17.JPG)
+
+______
+# what about cmake
+cmake is simlar to make, instead of producing executables, cmake is one level above produce build file and it is able to generate makefile, aslo build files for other build systems like VS and so on...
+CMake is powerful when you want to mka e project for multiple platform and genrate file for multipüle build systems.
+
+If you use an IDE or editor that can pouse CMAKe, then you can build your project directly from your editor. Then we may consider cmake.
+
+
+
+
+
+
 
 
 

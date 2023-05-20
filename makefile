@@ -16,9 +16,9 @@ TARGET = $(BIN_DIR)/myprogram
 SOURCES = main.cpp \
 		play01Templates.cpp \
 		playground.cpp
-OBJECTS = $(OBJ_DIR)/main.o \
-		$(OBJ_DIR)/play01Templates.o \
-		$(OBJ_DIR)/playground.o
+# create object variable from the sources variables
+OBJECT_NAMES = $(SOURCES:.cpp=.o)
+OBJECTS = $(patsubst %,$(OBJ_DIR)/%,$(OBJECT_NAMES))
 
 
 # Build
@@ -29,9 +29,17 @@ $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 ## compiling
+# -c: The flag passed to the compiler to indicate that the input file should be compiled into an object file, rather than an executable.
+# -o $@: The -o flag followed by $@, which is a special variable representing the target name (the object file being generated). This specifies the output file name for the compiler.
+# $^: A special variable representing all the prerequisites (dependencies) of the rule. In this case, it refers to the source file (%.cpp), which is the input file for the compiler.
 $(OBJ_DIR)/%.o: %.cpp
 #	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $^
+
+# phonies
+.PHONY: all clean
+
+all: $(TARGET)
 
 # Rule to clean the project by removing object files and the executable
 clean:
