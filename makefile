@@ -5,6 +5,9 @@ BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 BIN_DIR = $(BUILD_DIR)/bin
 
+SRC_DIR = src
+APP_DIR = $(SRC_DIR)/app
+
 # Compiler
 CC = g++
 # Compiler flags
@@ -13,9 +16,10 @@ CFLAGS = -Wall -Wextra -std=c++17
 
 # Files
 TARGET = $(BIN_DIR)/myprogram
-SOURCES = main.cpp \
-		play01Templates.cpp \
-		playground.cpp
+SOURCES = $(SRC_DIR)/main.cpp \
+		$(APP_DIR)/play01Templates.cpp \
+		$(APP_DIR)/playground.cpp
+		
 # create object variable from the sources variables
 OBJECT_NAMES = $(SOURCES:.cpp=.o)
 OBJECTS = $(patsubst %,$(OBJ_DIR)/%,$(OBJECT_NAMES))
