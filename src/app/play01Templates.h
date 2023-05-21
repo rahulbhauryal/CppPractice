@@ -12,17 +12,17 @@
 class FunctionTemplate {
     private:
             template<typename T>
-            void printMe(T num) {
+            static void printMe(const T num) const{
                 std::cout << "print in templete " << num << std::endl; 
             }
 
-            void printMe(double num) {
+            static void printMe (const double num) const{
                 std::cout << "print in overloading " << num << std::endl;
             }
 
     public:
 
-    void playFnTemplate();
+    static void playFnTemplate();
 };
 
 /**
@@ -34,16 +34,18 @@ class ClassTemplate {
         T value;
 
     public:
-        ClassTemplate() {}
+        ClassTemplate(): value(std::nullptr) {}
 
-        ClassTemplate(T value_):value(value_){}
+        explicit ClassTemplate(const T &value_):value(value_){}
 
-        void write(T value_) {
+        void write(const T &value_) {
             value = value_;
-            std::cout << "ClassTemplate: write value " < value_ << std::endl;
+            std::cout << "ClassTemplate: write value " << value_ << std::endl;
         }
 
-        T read() {
+        // it's important to note that you should only declare a member function as const if it genuinely does not modify any member variables of the class. If the function performs any modifications, 
+        // such as updating internal state or member variables, it should not be declared as const.
+        T read() const{
             std::cout << "ClassTemplate: read value " ;
             return value;
         }
@@ -57,17 +59,24 @@ template<int size, int value = 0>
 class ValueTemplate {
     private:
         int *base;
-    
+
     public:
-        ValueTemplate() {
-            base = new int[size];
+        ValueTemplate(): base(new int[size]) {
+            if (base == nullptr) {
+                // error assigning memory. Take measures.
+                return;
+            }
 
             for (int i = 0; i < size; i++) {
                 base[i] = value;
             }
         }
 
-        void print() {
+        ~ValueTemplate() {
+            delete[] base;
+        }
+
+        void print() const{
             for (int i = 0; i < size; i++) {
                 std::cout << "print:: " << base[i] << std::endl;
             }
@@ -97,11 +106,13 @@ class Register {
                                     /// The square brackets [] indicate that it is a pointer to an array.
 
     public:
-        Register() {
+        Register() : value(std::make_unique<T[]>(size)) {
             //value = new T[size];
             //std::memset(value, 0, size*sizeof(T));
 
-            value = std::make_unique<T[]>(size);  /// std::make_unique<T[]>(size) is a function that constructs 
+            // Initializing member variables in the initialization list can be more efficient because it allows the compiler to directly 
+            // initialize the variable instead of first default-initializing it and then assigning a new value in the constructor body.
+            //value = std::make_unique<T[]>(size);  /// std::make_unique<T[]>(size) is a function that constructs 
                                                   /// and returns a std::unique_ptr pointing to a dynamically 
                                                   /// allocated array of type T with a size specified by the size argument.          
         }
@@ -110,13 +121,13 @@ class Register {
             //delete(value);
         }
 
-        void Print() {
+        void Print() const{
             for (int cnt = 0; cnt < size; cnt++) {
                 std::cout << "Register::Print: " << cnt << " : val = " << value[cnt] << std::endl;
             }
         }
 
-        void Set(int index, T value_) {
+        void Set(const int index,const T value_) {
             bool isValid = index >= 0 && index < size;
 
             if (isValid) {

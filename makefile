@@ -45,6 +45,10 @@ $(OBJ_DIR)/%.o: %.cpp
 
 all: $(TARGET)
 
+# Cppcheck target
+cppcheck:
+	cppcheck --enable=all --inconclusive --std=c++17 $(SOURCES)													
+
 # Rule to clean the project by removing object files and the executable
 clean:
 ifeq ($(OS),Windows_NT)

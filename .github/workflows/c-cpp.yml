@@ -18,6 +18,8 @@ jobs:
       run: echo Hi Mars...!
     - name: gcc version
       run: g++ --version
+    - name: cppcheck version
+      run: cppcheck --version
     - name: ls
       run: ls
     - name: compile and run gcc make
@@ -25,5 +27,7 @@ jobs:
           make
           ls
           ./build/bin/myprogram
+    - name: make cppcheck
+      run: make cppcheck
     - name: make clean
       run: make
