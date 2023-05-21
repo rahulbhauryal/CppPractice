@@ -21,8 +21,7 @@ class FunctionTemplate {
             }
 
     public:
-
-    static void playFnTemplate();
+        void playFnTemplate();
 };
 
 /**
