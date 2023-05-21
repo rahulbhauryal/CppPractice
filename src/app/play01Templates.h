@@ -135,3 +135,44 @@ class Register {
         }
 
 };
+
+/**
+ * @brief Templete templete parameter. Template parametrs are  themselves class templetes.
+ * 
+ *          Parameter MUST be a CLASS templete
+ * 
+ */
+template<typename T, size_t size>
+class GenericClass{
+    private:
+        std::unique_ptr<T[]> value;
+    
+    public:
+        GenericClass(): value(std::make_unique<T[]>(size)) {
+        }
+
+        //T& operator[](size_t index) {
+        //return value[index];
+        //}        
+};
+
+template<template<typename T, size_t size> class C, typename T, size_t size>
+size_t eSize(C<T, size> &ref) {
+    T tmpVeriable;
+    return sizeof(T);
+};
+
+/* TODO: below code does not work
+template<template<typename T, size_t size> class C, typename T, size_t size>
+void fillGenericClassData(C<T, size> &ref, size_t index, T num) {
+    //ref[index] = num;
+};
+
+template<template<typename T, size_t size> class C, typename T, size_t size>
+void printGenericClassData(C<T, size> &ref) {
+    std::cout << "printGenericClassData: ";
+    for (size_t i = 0; i < size; i++) {
+       // std::cout << "  " << ref[i];
+    }
+};
+*/

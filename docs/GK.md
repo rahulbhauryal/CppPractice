@@ -24,4 +24,17 @@ When you use MinGW, you can invoke the MinGW GCC compiler to compile your source
 
 So, to summarize, MinGW is the environment that allows you to utilize the GCC compiler on Windows, while the resulting a.exe file is simply the default name given to the executable produced by the GCC compiler in the absence of a specific output name.
 
+# size_t
+short explanation of the advantages of size_t:
+
+- Portability: size_t is implementation-defined and can represent the largest possible size on a given platform, making code portable across different platforms and compilers.
+
+- Unsigned nature: size_t is an unsigned type, ensuring non-negative values for sizes and indices, avoiding issues with signed integer overflow or negative values.
+
+- Compatibility: Many standard library functions and containers use size_t, ensuring compatibility with existing code and libraries.
+
+- Clarity: Using size_t explicitly for sizes and indices improves code readability and communicates the intended purpose of the variable or parameter.
+
+- In summary, size_t offers portability, avoids signed integer issues, ensures compatibility, and enhances code clarity for representing sizes and indices.
+
 #

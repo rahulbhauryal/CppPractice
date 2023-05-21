@@ -40,5 +40,14 @@ void Playground::PlayTemplate() {
     reg2.Set(3, 3.14159);
     reg2.Print();
 
-    
+    std::cout << "\n>> temnplate template parameter : " << std::endl;
+    GenericClass<int, 5> genericClass1;
+    std::cout << "GenericClass size: " << eSize(genericClass1) << std::endl;
+    GenericClass<char, 5> genericClass2;
+    std::cout << "GenericClass size: " << eSize(genericClass2) << std::endl;
+
+    // see definition for more info
+    //fillGenericClassData(genericClass2, 3, 100);
+    //printGenericClassData(genericClass2);
+
 }
