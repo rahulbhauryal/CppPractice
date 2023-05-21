@@ -70,3 +70,8 @@ class ValueTemplate {
             }
         }
 };
+
+/**
+ * @brief Type template parameters. class and typename have same meaning. default type and size.
+ * 
+ */
