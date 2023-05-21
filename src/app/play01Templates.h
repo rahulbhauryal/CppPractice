@@ -12,11 +12,11 @@
 class FunctionTemplate {
     private:
             template<typename T>
-            static void printMe(const T num) const{
+            void printMe(const T num){
                 std::cout << "print in templete " << num << std::endl; 
             }
 
-            static void printMe (const double num) const{
+            void printMe (const double num){
                 std::cout << "print in overloading " << num << std::endl;
             }
 
@@ -34,7 +34,7 @@ class ClassTemplate {
         T value;
 
     public:
-        ClassTemplate(): value(std::nullptr) {}
+        ClassTemplate(){}
 
         explicit ClassTemplate(const T &value_):value(value_){}
 
