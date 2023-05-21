@@ -50,4 +50,18 @@ void Playground::PlayTemplate() {
     //fillGenericClassData(genericClass2, 3, 100);
     //printGenericClassData(genericClass2);
 
+    MemberTemplate();
+}
+
+void Playground::MemberTemplate(){
+    // A good example of unique pointer can be seen here.
+    DummyUart dummyUart;
+    std::unique_ptr<char[]> ptr = std::make_unique<char[]>(10);
+    std::memset(ptr.get(), 'H', 10);
+    dummyUart.write(std::move(ptr), 10);
+    std::cout << "\n";
+
+    DummySpi dummySpi;
+    GenericDataClass<char, 20> genericDataClass;
+    genericDataClass.writeApb(dummySpi);
 }

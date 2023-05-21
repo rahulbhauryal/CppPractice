@@ -176,3 +176,49 @@ void printGenericClassData(C<T, size> &ref) {
     }
 };
 */
+
+
+/**
+ * @brief Member template: Member templates in C++ allow you to define a template
+ *        inside a class that can work with different types of members. They provide
+ *        flexibility and reusability in code by allowing you to define generic member 
+ *        functions or member variables.
+ * 
+ */
+
+class DummyUart {
+    public:
+        void write(std::unique_ptr<char[]> data, size_t size) {
+            std::cout << "Sending data bytes using UART... ";
+            for (size_t i = 0; i < size; i++) {
+                std::cout << data.get()[i] << ", ";
+            }
+        }
+};
+
+class DummySpi {
+    public:
+        void write(std::unique_ptr<char[]> data, size_t size) {
+            std::cout << "Sending data bytes using SPI... ";
+            for (size_t i = 0; i < size; i++) {
+                std::cout << data.get()[i] << ", ";
+            }
+        }
+};
+
+template<typename T = char, size_t size = 5>
+class GenericDataClass {
+    private:
+        std::unique_ptr<T[]> data;
+
+    public:
+        GenericDataClass():data(std::make_unique<T[]>(size)) {
+            std::memset(data.get(), 'R', size);
+        }
+
+        // local nested class can not have member template
+        template<typename P>
+        void writeApb(P &p) {
+            p.write(std::move(data), size);
+        }
+};

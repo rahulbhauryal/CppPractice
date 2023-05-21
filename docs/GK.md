@@ -37,4 +37,25 @@ short explanation of the advantages of size_t:
 
 - In summary, size_t offers portability, avoids signed integer issues, ensures compatibility, and enhances code clarity for representing sizes and indices.
 
-#
+# Passing of unique pointer
+```
+    class DummyUart {
+        public:
+            void write(std::unique_ptr<char[]> data, size_t size) {
+                std::cout << "Sending data bytes using UART... ";
+                for (size_t i = 0; i < size; i++) {
+                    std::cout << data.get()[i] << ", ";
+                }
+            }
+    };
+
+    DummyUart dummyUart;
+    std::unique_ptr<char[]> ptr = std::make_unique<char[]>(10);
+    dummyUart.write(std::move(ptr), 10);
+````
+**data.get()[i]**\
+**std::unique_ptr<char[]> ptr**\
+**std::make_unique<char[]>(10)**\
+**std::move(ptr)**
+
+# 
