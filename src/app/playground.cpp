@@ -8,6 +8,7 @@ void Playground::PlayTemplate() {
     FunctionTemplate playFnTmp;
     playFnTmp.playFnTemplate();
 
+
     std::cout << "\n>> Class templete : " << std::endl;
     ClassTemplate<int> playClassTemplate1(100);
     std::cout << "read value: " << playClassTemplate1.read() << std::endl;
@@ -17,6 +18,7 @@ void Playground::PlayTemplate() {
     playClassTemplate2 = std::make_unique<ClassTemplate<std::string>>("hi");
     std::cout << "read value: " << playClassTemplate2->read() << std::endl;
 
+
     std::cout << "\n>> Default value templete : " << std::endl;
     // default value parameter
     ValueTemplate<5, 100> valueTemplate1;
@@ -25,5 +27,18 @@ void Playground::PlayTemplate() {
     ValueTemplate<3> valueTemplate2;
     valueTemplate2.print();
 
+
     std::cout << "\n>> Type templete parameter : " << std::endl;
+    std::cout << "size typname: " << SizeTypename<int>(5) << std::endl;
+    std::cout << "size class: " << SizeClass<int>(5) << std::endl;
+
+    Register<> reg1;
+    reg1.Set(3, 55);
+    reg1.Print();
+
+    Register<float, 5> reg2;
+    reg2.Set(3, 3.14159);
+    reg2.Print();
+
+    
 }

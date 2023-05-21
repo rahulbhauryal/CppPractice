@@ -2,6 +2,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <cstring>
+#include <functional>
+#include <memory>
 
 /**
 * @brief This template shows how function template works along with function overloading
@@ -75,3 +78,50 @@ class ValueTemplate {
  * @brief Type template parameters. class and typename have same meaning. default type and size.
  * 
  */
+template<typename T>
+int SizeTypename(T num) {
+    return(sizeof(num));
+}
+
+template<class T>
+int SizeClass(T num) {
+    return(sizeof(num));
+}
+
+template<typename T = int, int size = 10>
+class Register {
+    private:
+        //T *value;
+        std::unique_ptr<T[]> value; ///  declares a std::unique_ptr named value without initializing it. 
+                                    ///  The <> angle brackets indicate that it is managing a dynamic array of type T. 
+                                    /// The square brackets [] indicate that it is a pointer to an array.
+
+    public:
+        Register() {
+            //value = new T[size];
+            //std::memset(value, 0, size*sizeof(T));
+
+            value = std::make_unique<T[]>(size);  /// std::make_unique<T[]>(size) is a function that constructs 
+                                                  /// and returns a std::unique_ptr pointing to a dynamically 
+                                                  /// allocated array of type T with a size specified by the size argument.          
+        }
+
+        ~Register() {
+            //delete(value);
+        }
+
+        void Print() {
+            for (int cnt = 0; cnt < size; cnt++) {
+                std::cout << "Register::Print: " << cnt << " : val = " << value[cnt] << std::endl;
+            }
+        }
+
+        void Set(int index, T value_) {
+            bool isValid = index >= 0 && index < size;
+
+            if (isValid) {
+                value[index] = value_;
+            }
+        }
+
+};
