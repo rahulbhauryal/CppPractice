@@ -18,6 +18,14 @@ jobs:
       run: echo Hi Mars...!
     - name: gcc version
       run: g++ --version
+    - name: Check if cppcheck is installed
+      run: |
+        if ! command -v cppcheck &> /dev/null; then
+          echo "cppcheck not found, installing..."
+          sudo apt-get install cppcheck -y
+        else
+          echo "cppcheck is already installed."
+        fi
     - name: cppcheck version
       run: cppcheck --version
     - name: ls
