@@ -158,7 +158,6 @@ class GenericClass{
 
 template<template<typename T, size_t size> class C, typename T, size_t size>
 size_t eSize(C<T, size> &ref) {
-    T tmpVeriable;
     return sizeof(T);
 };
 
