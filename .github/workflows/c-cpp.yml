@@ -35,6 +35,21 @@ jobs:
           make
           ls
           ./build/bin/myprogram
+    - name: Run Unit Test
+      run: |
+        sudo apt install libgtest-dev cmake
+        cd ../lib/googletest/
+        mkdir lib/googletest/build
+        rm -r  build
+        mkdir build
+        cmake ..
+        make
+        cd ../../../
+        cd test
+        make clean
+        mkdir build
+        ./test_main
+        cd ../
     - name: make cppcheck
       run: make cppcheck
     - name: make clean
