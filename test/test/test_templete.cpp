@@ -49,3 +49,16 @@ TEST(TempleteTest, ClassTemplatePartialSpecialization) {
 
     ASSERT_EQ(partialGenericArray.read(5), 3);
 }
+
+
+TEST(TempleteTest, ClassTemplateDependentName) {
+    DependentName::Counter<int> counter(100, 105);
+    counter.count();
+    ASSERT_EQ(counter.readCount(), 101);
+
+    for (int i = 0; i < 5; i++) {
+        counter.count();
+    }
+
+    ASSERT_EQ(counter.readCount(), 0);
+}

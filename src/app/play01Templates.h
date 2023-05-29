@@ -321,6 +321,45 @@ int PartialGenericArray<int, size>::read(unsigned index) {
     return buffer[index];
 }
 
+/**
+ * @brief Dependent name registration
+ * 
+ */
+
+namespace DependentName {
+    template<typename T>
+    class Register {
+        protected:
+            T value;
+        public:
+            Register(T value_): value(value_) {
+            }
+    };
+
+    template<typename T>
+    class Counter:public Register<T> {
+        public:
+            Counter(T value_, T mod_):Register<T>(value_), mod(mod_) {}
+
+            void count() {
+                // NOTE: can be write it as this-> or Register<T>::
+                if (this->value < mod) {
+                    Register<T>::value++;
+                }
+                else {
+                    this->value = 0;
+                }
+            }
+
+            T readCount() {
+                return Register<T>::value;
+            }
+
+        private:
+            T mod;
+    };
+}
+
 
 
 
