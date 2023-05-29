@@ -253,3 +253,74 @@ template<typename T>
 void SepMetRegister<T>::write(T value_) {
     value = value_;
 }
+
+/**
+ * @brief Templete Specialisation: 
+ * Template specialization is a feature in C++ that allows you to provide a specific implementation 
+ * for a template when certain conditions are met. 
+ * It allows you to customize the behavior of a template for specific types or values.
+ * Explicit Specialization, Partial Specialization (not allowed for function template)
+ */
+template <typename T, int Size>
+class GenericArray {
+    // Generic implementation for any type T and size Size
+    // ...
+};
+
+template <>
+class GenericArray<int, 2> {
+private:
+    int *buffer;
+
+public:
+    GenericArray() {
+        // Constructor specific to int elements and size 2
+        buffer = new int[2];
+    }
+    void setValue(int val1, int val2);
+    int sum();
+};
+
+void GenericArray<int, 2>::setValue(int val1, int val2) {
+    buffer[0] = val1;
+    buffer[1] = val2;
+}
+
+int GenericArray<int, 2>::sum() {
+    // Custom implementation for sum() specific to int elements and size 2
+    return buffer[0] + buffer[1];
+}
+
+template <typename T, unsigned Size>
+class PartialGenericArray {
+    // Generic implementation for any type T and size Size
+    // ...
+};
+
+template <unsigned size>
+class PartialGenericArray<int, size> {
+private:
+    int *buffer;
+
+public:
+    PartialGenericArray() {
+        // Constructor specific to int elements and size 2
+        buffer = new int[size];
+    }
+    void set(unsigned index, int value);
+    int read(unsigned index);
+};
+
+template<unsigned size>
+void PartialGenericArray<int, size>::set(unsigned index, int value) {
+    buffer[index] = value;
+}
+
+template<unsigned size>
+int PartialGenericArray<int, size>::read(unsigned index) {
+    return buffer[index];
+}
+
+
+
+
