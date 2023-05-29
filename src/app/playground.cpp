@@ -9,15 +9,6 @@ void Playground::PlayTemplate() {
     playFnTmp.playFnTemplate();
 
 
-    std::cout << "\n>> Class templete : " << std::endl;
-    ClassTemplate<int> playClassTemplate1(100);
-    std::cout << "read value: " << playClassTemplate1.read() << std::endl;
-
-    // class template using unique pointers
-    std::unique_ptr<ClassTemplate<std::string>> playClassTemplate2;
-    playClassTemplate2 = std::make_unique<ClassTemplate<std::string>>("hi");
-    std::cout << "read value: " << playClassTemplate2->read() << std::endl;
-
 
     std::cout << "\n>> Default value templete : " << std::endl;
     // default value parameter

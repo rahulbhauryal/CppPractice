@@ -22,3 +22,12 @@ TEST(TempleteTest, ClassTemplateTestUniquePointer) {
     playClassTemplate->write(testString);
     ASSERT_EQ(playClassTemplate->read(), testString);
 }
+
+
+// Test class templete using unique pointer
+TEST(TempleteTest, ClassTemplateSeprateMethodDefinitions) {
+    SepMetRegister SepMethodDef1(100);
+    ASSERT_EQ(SepMethodDef1.read(), 100);
+    SepMethodDef1.write(50);
+    ASSERT_EQ(SepMethodDef1.read(), 50);
+}

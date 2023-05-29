@@ -158,6 +158,7 @@ class GenericClass{
 
 template<template<typename T, size_t size> class C, typename T, size_t size>
 size_t eSize(C<T, size> &ref) {
+    (void)ref;
     return sizeof(T);
 };
 
@@ -221,3 +222,34 @@ class GenericDataClass {
             p.write(std::move(data), size);
         }
 };
+
+/**
+ * @brief Seperate method definitions
+ * 
+ */
+
+template<typename T>
+class SepMetRegister {
+    private:
+        T value;
+    public:
+        SepMetRegister(T value_);
+        T read();
+        void write(T value_);
+};
+
+// IMPORTENT: include definitions in .h file only
+template<typename T>
+SepMetRegister<T>::SepMetRegister(T value_) {
+    value = value_;
+}
+
+template<typename T>
+T SepMetRegister<T>::read(){
+    return value;
+}
+
+template<typename T>
+void SepMetRegister<T>::write(T value_) {
+    value = value_;
+}
