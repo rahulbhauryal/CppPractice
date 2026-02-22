@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Embedded GUI Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <h1>Embedded GUI Application</h1>
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusLabel">Disconnected</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- System Status -->
+        <section class="card" id="systemStatus">
+            <h2>System Status</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <span class="label">CPU Usage</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="cpuBar" style="width: 0%"></div>
+                    </div>
+                    <span class="value" id="cpuValue">—</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Memory</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="memBar" style="width: 0%"></div>
+                    </div>
+                    <span class="value" id="memValue">—</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Temperature</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-temp" id="tempBar" style="width: 0%"></div>
+                    </div>
+                    <span class="value" id="tempValue">—</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls -->
+        <section class="card" id="controls">
+            <h2>Controls</h2>
+            <div class="controls-grid">
+                <div class="control-item">
+                    <label class="toggle-label" for="displayToggle">Display</label>
+                    <label class="switch">
+                        <input type="checkbox" id="displayToggle" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-item">
+                    <label class="toggle-label" for="backlightToggle">Backlight</label>
+                    <label class="switch">
+                        <input type="checkbox" id="backlightToggle" checked />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-item">
+                    <label class="toggle-label" for="debugToggle">Debug Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="debugToggle" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-item">
+                    <label class="toggle-label" for="brightnessRange">Brightness</label>
+                    <input type="range" id="brightnessRange" min="0" max="100" value="80" />
+                    <span class="value" id="brightnessValue">80%</span>
+                </div>
+            </div>
+            <div class="button-row">
+                <button class="btn btn-primary" id="btnConnect" onclick="toggleConnection()">Connect</button>
+                <button class="btn btn-secondary" onclick="refreshStatus()">Refresh</button>
+                <button class="btn btn-danger" onclick="resetDevice()">Reset</button>
+            </div>
+        </section>
+
+        <!-- Event Log -->
+        <section class="card" id="eventLog">
+            <h2>Event Log <button class="btn btn-sm" onclick="clearLog()">Clear</button></h2>
+            <div class="log-container" id="logContainer">
+                <p class="log-entry log-info">[INFO] Dashboard initialized.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Embedded GUI Application &mdash; <a href="https://github.com/rahulbhauryal/CppPractice" target="_blank" rel="noopener">GitHub</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
