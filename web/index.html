@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embedded GUI Demo</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top navigation bar ───────────────────────── */
+    header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    header .logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #58a6ff;
+      letter-spacing: 1px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+    }
+
+    .nav-tab {
+      padding: 6px 14px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      background: transparent;
+      color: #8b949e;
+      transition: all 0.2s;
+    }
+
+    .nav-tab:hover  { background: #21262d; color: #c9d1d9; }
+    .nav-tab.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+
+    /* ── Status bar ───────────────────────────────── */
+    .status-bar {
+      background: #161b22;
+      border-bottom: 1px solid #21262d;
+      padding: 6px 24px;
+      font-size: 0.75rem;
+      color: #8b949e;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .dot.green  { background: #3fb950; box-shadow: 0 0 6px #3fb950; }
+    .dot.yellow { background: #d29922; box-shadow: 0 0 6px #d29922; }
+    .dot.red    { background: #f85149; box-shadow: 0 0 6px #f85149; }
+
+    /* ── Main layout ──────────────────────────────── */
+    main {
+      flex: 1;
+      padding: 24px;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    /* ── Card ─────────────────────────────────────── */
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #58a6ff;
+      border-bottom: 1px solid #21262d;
+      padding-bottom: 8px;
+    }
+
+    /* ── Gauge ────────────────────────────────────── */
+    .gauge-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gauge-svg { overflow: visible; }
+
+    .gauge-track  { fill: none; stroke: #21262d; stroke-width: 14; stroke-linecap: round; }
+    .gauge-fill   { fill: none; stroke-width: 14; stroke-linecap: round;
+                    transition: stroke-dashoffset 0.8s ease, stroke 0.8s ease; }
+    .gauge-needle { stroke: #c9d1d9; stroke-width: 2; stroke-linecap: round;
+                    transition: transform 0.8s ease; transform-origin: 100px 100px; }
+
+    .gauge-value  { font-size: 2rem; font-weight: 700; fill: #c9d1d9; text-anchor: middle; }
+    .gauge-unit   { font-size: 0.75rem; fill: #8b949e; text-anchor: middle; }
+
+    /* ── Digital display ──────────────────────────── */
+    .digital-display {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #3fb950;
+      text-align: center;
+      letter-spacing: 4px;
+      text-shadow: 0 0 8px #3fb950aa;
+    }
+
+    .display-label {
+      font-size: 0.75rem;
+      color: #8b949e;
+      text-align: center;
+    }
+
+    /* ── Progress bars ────────────────────────────── */
+    .progress-group { display: flex; flex-direction: column; gap: 10px; }
+
+    .progress-item  { display: flex; flex-direction: column; gap: 4px; }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    .progress-track {
+      height: 8px;
+      background: #21262d;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    /* ── Toggle switches ──────────────────────────── */
+    .toggle-group { display: flex; flex-direction: column; gap: 12px; }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px; height: 24px;
+      cursor: pointer;
+    }
+
+    .toggle-switch input { display: none; }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: #30363d;
+      border-radius: 12px;
+      transition: background 0.3s;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: #c9d1d9;
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .toggle-switch input:checked ~ .toggle-track { background: #1f6feb; }
+    .toggle-switch input:checked ~ .toggle-thumb {
+      transform: translateX(20px);
+      background: #ffffff;
+    }
+
+    /* ── Alarm list ───────────────────────────────── */
+    .alarm-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .alarm-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      border: 1px solid transparent;
+    }
+
+    .alarm-item.critical { background: #1e1112; border-color: #f8514966; }
+    .alarm-item.warning  { background: #191109; border-color: #d2992266; }
+    .alarm-item.info     { background: #0c1826; border-color: #58a6ff66; }
+
+    .alarm-icon { font-size: 1rem; }
+    .alarm-text { flex: 1; }
+    .alarm-time { font-size: 0.7rem; color: #8b949e; }
+
+    /* ── Button grid ──────────────────────────────── */
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .gui-btn {
+      padding: 12px;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      background: #21262d;
+      color: #c9d1d9;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .gui-btn:hover  { background: #2d333b; border-color: #58a6ff; color: #58a6ff; }
+    .gui-btn:active { transform: scale(0.97); }
+    .gui-btn.danger { border-color: #f8514966; color: #f85149; }
+    .gui-btn.danger:hover { background: #1e1112; }
+
+    /* ── Footer ───────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 14px;
+      font-size: 0.75rem;
+      color: #484f58;
+      border-top: 1px solid #21262d;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top navigation ──────────────────────────── -->
+<header>
+  <span class="logo">⚙ EmbeddedGUI Demo</span>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="setTab(this)">Dashboard</button>
+    <button class="nav-tab" onclick="setTab(this)">Sensors</button>
+    <button class="nav-tab" onclick="setTab(this)">Controls</button>
+    <button class="nav-tab" onclick="setTab(this)">Logs</button>
+  </nav>
+</header>
+
+<!-- ── Status bar ──────────────────────────────── -->
+<div class="status-bar">
+  <span class="status-indicator"><span class="dot green"></span>System Online</span>
+  <span class="status-indicator"><span id="cpuDot" class="dot green"></span>CPU: <span id="cpuStatus">Normal</span></span>
+  <span class="status-indicator"><span class="dot green"></span>CAN Bus: Active</span>
+  <span id="clockDisplay">--:--:--</span>
+</div>
+
+<!-- ── Widget grid ─────────────────────────────── -->
+<main>
+
+  <!-- Gauge: CPU Load -->
+  <div class="card">
+    <div class="card-title">CPU Load</div>
+    <div class="gauge-wrap">
+      <svg class="gauge-svg" width="200" height="120" viewBox="0 0 200 130">
+        <!-- arc path: semicircle from 180° to 0° (left to right) -->
+        <path id="cpuTrack"
+          d="M 20 105 A 80 80 0 0 1 180 105"
+          class="gauge-track" />
+        <path id="cpuArc"
+          d="M 20 105 A 80 80 0 0 1 180 105"
+          class="gauge-fill" stroke="#3fb950"
+          stroke-dasharray="0 251" />
+        <text x="100" y="98" class="gauge-value" id="cpuVal">0</text>
+        <text x="100" y="116" class="gauge-unit">%</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Gauge: Temperature -->
+  <div class="card">
+    <div class="card-title">Core Temperature</div>
+    <div class="gauge-wrap">
+      <svg class="gauge-svg" width="200" height="120" viewBox="0 0 200 130">
+        <path d="M 20 105 A 80 80 0 0 1 180 105" class="gauge-track" />
+        <path id="tempArc"
+          d="M 20 105 A 80 80 0 0 1 180 105"
+          class="gauge-fill" stroke="#58a6ff"
+          stroke-dasharray="0 251" />
+        <text x="100" y="98" class="gauge-value" id="tempVal">0</text>
+        <text x="100" y="116" class="gauge-unit">°C</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Digital clock / uptime -->
+  <div class="card">
+    <div class="card-title">System Clock</div>
+    <div class="digital-display" id="sysClock">00:00:00</div>
+    <div class="display-label">HH : MM : SS</div>
+    <div class="digital-display" style="font-size:1.2rem; color:#d29922; text-shadow: 0 0 8px #d29922aa;" id="uptime">UP: 0d 00:00:00</div>
+    <div class="display-label">Uptime</div>
+  </div>
+
+  <!-- Progress bars -->
+  <div class="card">
+    <div class="card-title">Resource Usage</div>
+    <div class="progress-group">
+
+      <div class="progress-item">
+        <div class="progress-header">
+          <span>RAM</span><span id="ramPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="ramBar" class="progress-bar" style="width:0%; background:#58a6ff;"></div>
+        </div>
+      </div>
+
+      <div class="progress-item">
+        <div class="progress-header">
+          <span>Flash</span><span id="flashPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="flashBar" class="progress-bar" style="width:0%; background:#3fb950;"></div>
+        </div>
+      </div>
+
+      <div class="progress-item">
+        <div class="progress-header">
+          <span>Stack</span><span id="stackPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="stackBar" class="progress-bar" style="width:0%; background:#d29922;"></div>
+        </div>
+      </div>
+
+      <div class="progress-item">
+        <div class="progress-header">
+          <span>Heap</span><span id="heapPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="heapBar" class="progress-bar" style="width:0%; background:#f0883e;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toggle switches -->
+  <div class="card">
+    <div class="card-title">Peripheral Control</div>
+    <div class="toggle-group">
+
+      <div class="toggle-row">
+        <span>UART0</span>
+        <label class="toggle-switch">
+          <input type="checkbox" checked onchange="logToggle('UART0', this.checked)">
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>SPI1</span>
+        <label class="toggle-switch">
+          <input type="checkbox" onchange="logToggle('SPI1', this.checked)">
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>I²C Bus</span>
+        <label class="toggle-switch">
+          <input type="checkbox" checked onchange="logToggle('I²C Bus', this.checked)">
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>CAN Bus</span>
+        <label class="toggle-switch">
+          <input type="checkbox" checked onchange="logToggle('CAN', this.checked)">
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>ADC Sampling</span>
+        <label class="toggle-switch">
+          <input type="checkbox" onchange="logToggle('ADC', this.checked)">
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Alarm / Event log -->
+  <div class="card">
+    <div class="card-title">Event Log</div>
+    <div class="alarm-list" id="alarmList">
+      <div class="alarm-item info">
+        <span class="alarm-icon">ℹ</span>
+        <span class="alarm-text">System booted successfully</span>
+        <span class="alarm-time">00:00:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Control buttons -->
+  <div class="card">
+    <div class="card-title">Actions</div>
+    <div class="button-grid">
+      <button class="gui-btn" onclick="addEvent('info','Diagnostics started')">Run Diagnostics</button>
+      <button class="gui-btn" onclick="addEvent('info','Firmware check OK')">Check Firmware</button>
+      <button class="gui-btn" onclick="addEvent('warning','Calibration triggered')">Calibrate</button>
+      <button class="gui-btn" onclick="addEvent('info','Logs exported')">Export Logs</button>
+      <button class="gui-btn" onclick="addEvent('warning','System reset scheduled')">Soft Reset</button>
+      <button class="gui-btn danger" onclick="addEvent('critical','Emergency stop!')">Emergency Stop</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>Embedded GUI Demo &mdash; inspired by <a href="https://www.embedded-wizard.de" style="color:#58a6ff" target="_blank" rel="noopener">Embedded Wizard</a></footer>
+
+<script>
+  /* ── Utilities ─────────────────────────────────── */
+  const SEMI_LEN = 251; // approximate arc length for the semicircle
+
+  function setArc(arcId, pct, maxLen) {
+    const el = document.getElementById(arcId);
+    if (!el) return;
+    const filled = (pct / 100) * maxLen;
+    el.setAttribute('stroke-dasharray', `${filled} ${maxLen - filled + 1}`);
+  }
+
+  function setArcColor(arcId, pct) {
+    const el = document.getElementById(arcId);
+    if (!el) return;
+    el.setAttribute('stroke', pct > 85 ? '#f85149' : pct > 60 ? '#d29922' : '#3fb950');
+  }
+
+  function pad2(n) { return String(n).padStart(2, '0'); }
+
+  /* ── Clock & uptime ────────────────────────────── */
+  const startTime = Date.now();
+
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('sysClock').textContent =
+      `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+    document.getElementById('clockDisplay').textContent =
+      `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const d = Math.floor(elapsed / 86400);
+    const h = Math.floor((elapsed % 86400) / 3600);
+    const m = Math.floor((elapsed % 3600) / 60);
+    const s = elapsed % 60;
+    document.getElementById('uptime').textContent =
+      `UP: ${d}d ${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+  }
+
+  /* ── Simulated telemetry ───────────────────────── */
+  let cpuTarget = 35, tempTarget = 45;
+  let cpuCurrent = 0, tempCurrent = 0;
+
+  function updateTelemetry() {
+    // drift target values slowly
+    cpuTarget  += (Math.random() - 0.5) * 12;
+    tempTarget += (Math.random() - 0.5) * 4;
+    cpuTarget  = Math.max(5,  Math.min(100, cpuTarget));
+    tempTarget = Math.max(20, Math.min(100, tempTarget));
+
+    // smooth approach
+    cpuCurrent  += (cpuTarget  - cpuCurrent)  * 0.15;
+    tempCurrent += (tempTarget - tempCurrent) * 0.15;
+
+    const cpu  = Math.round(cpuCurrent);
+    const temp = Math.round(tempCurrent);
+
+    document.getElementById('cpuVal').textContent  = cpu;
+    document.getElementById('tempVal').textContent = temp;
+    setArc('cpuArc',  cpu,  SEMI_LEN);
+    setArc('tempArc', temp, SEMI_LEN);
+    setArcColor('cpuArc',  cpu);
+    setArcColor('tempArc', temp);
+
+    // status bar
+    const cpuDot = document.getElementById('cpuDot');
+    const cpuStatus = document.getElementById('cpuStatus');
+    if (cpu > 85) {
+      cpuDot.className = 'dot red';   cpuStatus.textContent = 'High';
+    } else if (cpu > 60) {
+      cpuDot.className = 'dot yellow'; cpuStatus.textContent = 'Moderate';
+    } else {
+      cpuDot.className = 'dot green';  cpuStatus.textContent = 'Normal';
+    }
+
+    // random resource bars
+    setBar('ram',   35 + Math.random() * 30);
+    setBar('flash', 62 + Math.random() * 5);
+    setBar('stack', 15 + Math.random() * 20);
+    setBar('heap',  40 + Math.random() * 25);
+  }
+
+  function setBar(name, pct) {
+    pct = Math.round(pct);
+    document.getElementById(name + 'Bar').style.width = pct + '%';
+    document.getElementById(name + 'Pct').textContent = pct + '%';
+  }
+
+  /* ── Event log ─────────────────────────────────── */
+  function addEvent(level, msg) {
+    const now = new Date();
+    const time = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+    const icons = { critical: '🔴', warning: '⚠', info: 'ℹ' };
+    const list  = document.getElementById('alarmList');
+
+    const item = document.createElement('div');
+    item.className = `alarm-item ${level}`;
+    item.innerHTML = `
+      <span class="alarm-icon">${icons[level] || 'ℹ'}</span>
+      <span class="alarm-text">${msg}</span>
+      <span class="alarm-time">${time}</span>`;
+    list.prepend(item);
+
+    // keep max 8 entries
+    while (list.children.length > 8) list.removeChild(list.lastChild);
+  }
+
+  function logToggle(name, enabled) {
+    addEvent('info', `${name} ${enabled ? 'enabled' : 'disabled'}`);
+  }
+
+  /* ── Nav tabs ──────────────────────────────────── */
+  function setTab(el) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ── Init ──────────────────────────────────────── */
+  setInterval(updateClock,    1000);
+  setInterval(updateTelemetry, 800);
+  updateClock();
+  updateTelemetry();
+</script>
+</body>
+</html>
